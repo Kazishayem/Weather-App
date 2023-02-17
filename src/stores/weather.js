@@ -5,7 +5,7 @@ import axios from "axios";
 export const useWeatherStore = defineStore("weather", {
   state: () => ({
     api_key: "415eeb114c112148ffb14a4898d12e03",
-    weather_icon: "http://openweathermap.org/img/wn/",
+    weather_icon: "https://openweathermap.org/img/wn/",
     location_query: "",
     weather: {},
   }),
