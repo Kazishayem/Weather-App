@@ -1,12 +1,25 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { ref, computed } from "vue";
+import { defineStore } from "pinia";
+import axios from "axios";
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
+export const useWeatherStore = defineStore("weather", {
+  state: () => ({
+    api_key: "415eeb114c112148ffb14a4898d12e03",
+    weather_icon: "http://openweathermap.org/img/wn/",
+    location_query: "",
+    weather: {},
+  }),
 
-  return { count, doubleCount, increment }
-})
+  getters: {},
+  actions: {
+    async fetchWeather(e) {
+      if (e.key == "Enter") {
+        const {data} = await axios.get(
+          `https://api.openweathermap.org/data/2.5/weather?q=${this.location_query}&units=metric&appid=${this.api_key}`);
+
+          this.weather = data;
+
+      } 
+    },
+  },
+});

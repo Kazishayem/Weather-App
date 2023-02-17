@@ -1,5 +1,9 @@
 <script setup>
 
+import { useWeatherStore } from './stores/weather';
+
+const WeatherStore = useWeatherStore();
+
 </script>
 
 <template>
@@ -9,24 +13,35 @@
       <div class="search-box">
         <!-- search box -->
 
-        <input type="text" placeholder="Search..." class="search-bar">
+        <input type="text" placeholder="Search..." class="search-bar" v-model="WeatherStore.location_query"
+        @keypress="WeatherStore.fetchWeather">
       </div>
 
       <!-- weather information -->
 
-      <div class="weather-info">
+      <div class="weather-info" v-if="WeatherStore.weather.main !=undefined">
 
         <div class="location-box">
 
-          <div class="location">Dhaka</div>
-          <div class="date">17-12-2022</div>
+          <div class="location">{{ WeatherStore.weather.name }}, {{ WeatherStore.weather.sys.country }}</div>
+          <div class="date">{{ new Date().toLocaleString() }}</div>
 
         </div>
 
         <div class="weather-box">
 
-          <div class="temp">22 C</div>
-          <div class="weather">assdda</div>
+          <div class="temp">{{ WeatherStore.weather.main.temp }} °C</div>
+          <div class="weather">{{ WeatherStore.weather.weather[0].main }}</div>
+          <div class="icon">
+          <img :src="`http://openweathermap.org/img/wn/${WeatherStore.weather.weather[0].icon}@2x.png`" alt="">
+          </div>
+
+          <div class="other-info">
+          <span class="pressure">Pressure:{{ WeatherStore.weather.main.pressure}} mb</span>
+
+          <span class="humidity">Humidity:{{ WeatherStore.weather.main.humidity}}%</span>
+          
+          </div>
 
         </div>
 
@@ -63,7 +78,7 @@
 }
 
 .wrap{
-  height: 600px;
+  height: 700px;
   padding: 25px;
   border-radius: 25px;
   background-image: linear-gradient(to bottom ,rgba(0,0,0,0.15) , rgba(0,0,0,0,0.4));
@@ -119,7 +134,7 @@
   display: inline-block;
   padding: 10px 25px;
   color: #fff;
-  font-size: 100px;
+  font-size: 90px;
   font-weight: 900;
   text-shadow:3px 6px rgba(0,0,0,0,0.25) ;
   background-color: rgba(255,255,255, 0.25);
@@ -136,6 +151,24 @@
   font-weight: 700;
   font-style: italic;
   text-shadow: 3px 6px rgba(0,0,0,0,0.25);
+}
+
+.other-info{
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+}
+
+.pressure{
+  color: #fff;
+  font-size: 15px;
+}
+
+.humidity{
+  color: #fff;
+  font-size: 15px;
 }
 
 
